@@ -1,12 +1,17 @@
 import React from 'react'
-import { Header, Body, Footer } from './components/index'; 
+import { Route, BrowserRouter, Switch } from 'react-router-dom'
+import Main from './pages/main';
+import Page404 from './pages/404';
 
 function App() {
   return (
     <>
-      <Header/>
-      <Body/>
-      <Footer/>
+      <BrowserRouter>
+        <Switch>
+            <Route exact path="/" component={Main}/>
+            <Route component={Page404}/>
+        </Switch>
+      </BrowserRouter>
     </>
   );
 }
