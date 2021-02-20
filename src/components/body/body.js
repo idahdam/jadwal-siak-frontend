@@ -9,15 +9,15 @@ import {
     BodyButton
 } from './body.elements'
 import axios from 'axios';
+import Swal from 'sweetalert2';
 
-const {REACT_APP_PRESET_NAME, REACT_APP_CLOUD_URL, REACT_APP_LOCAL_API} = process.env;
+const {REACT_APP_PRESET_NAME, REACT_APP_CLOUD_URL} = process.env;
 const preset = REACT_APP_PRESET_NAME;
 const url =  REACT_APP_CLOUD_URL;
 
 
 const Body = () => {
-
-
+  
     const [image, setImage] = useState('');
     const [loading, setLoading] = useState(false);
     const onChange = e => {
@@ -29,13 +29,16 @@ const Body = () => {
         formData.append('file', image);
         formData.append('upload_preset', preset);
         try {
-          setLoading(true);
           const res = await axios.post(url, formData);
           const imageUrl = res.data.secure_url;
-          const image = await axios.post('http://${REACT_APP_LOCAL_API}/upload', {
+          const image = await axios.post(`http://localhost:3000/api/upload`, {
             imageUrl
-          });
-          setLoading(false);
+          }).then(Swal.fire({
+            icon: 'success',
+            title: 'File sudah ter-upload!',
+            showConfirmButton: false,
+            timer: 1500
+        }))
           setImage(image.data);
         } catch (err) {
           console.error(err);
@@ -44,7 +47,7 @@ const Body = () => {
 
     useEffect(() => {
         async function fetchImage() {
-          const image = await axios.get('http://${REACT_APP_LOCAL_API}/getLatest');
+          const image = await axios.get(`http://localhost:3000/api/getLatest`);
           setImage(image.data);
         }
         fetchImage();
