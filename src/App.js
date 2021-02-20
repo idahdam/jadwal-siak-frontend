@@ -9,6 +9,7 @@ function App() {
       <BrowserRouter>
         <Switch>
             <Route exact path="/" component={Main}/>
+            <Route exact path="/about" component={Main}/>
             <Route component={Page404}/>
         </Switch>
       </BrowserRouter>

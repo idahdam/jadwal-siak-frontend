@@ -7,7 +7,8 @@ import {
     BodyInput,
     BodyImage,
     BodyTextArea,
-    BodyButton
+    BodyButton,
+    BodyFormButton
 } from './body.elements'
 import Tesseract from 'tesseract.js';
 import axios from 'axios';
@@ -18,9 +19,70 @@ const preset = REACT_APP_PRESET_NAME;
 const url =  REACT_APP_CLOUD_URL;
 
 const Body = () => {
-  
+    const dayArray = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"]
     const [image, setImage] = useState('');
     const [text, setText] = useState('');
+    const [button, setButton] = useState({
+      senin: false,
+      selasa: false,
+      rabu: false,
+      kamis: false,
+      jumat: false,
+      sabtu: false
+    })
+    const [imagePos, setImagePos] = useState({
+      top: 0,
+      left: 0,
+      width: 0,
+      height: 0
+    })
+    const [imageRes, setImageRes] = useState({
+      width: 0,
+      height: 0,
+    })
+
+    const setButtonhandler = (button, day) => {
+      button[day] = !button[day]
+      console.log(button)
+    }
+
+    const setImagePostHandler = () => {
+      
+    }
+    
+    const setImageResHandler = (a, b) => {
+      imageRes['width'] = a
+      imageRes['height'] = b
+      // console.log(imageRes)
+      if(imageRes['width'] <= 1366 && imageRes['width'] >= 1200){
+        setImagePos({
+          top: 0,
+          left: 0,
+          width: 0,
+          height: 0
+        })
+      }
+      else if(imageRes['width'] < 1920 && imageRes['width'] >= 1440){
+        console.log('full hd')
+        setImagePos({
+          top: 0,
+          left: 0,
+          width: 0,
+          height: 0
+        })
+      }
+    }
+
+    const checkSize = (link) => {
+      const img = new Image();
+      img.src = link;
+      img.onload = function() {
+        // alert(this.width + 'x' + this.height);
+        console.log(this.width, this.height)
+        setImageResHandler(this.width, this.height)
+      }
+    }
+
 
     const setTextArea = (text) => {
       setText(text)
@@ -34,14 +96,6 @@ const Body = () => {
       alert('on build.')
     }
 
-    const checkSize = (link) => {
-      const img = new Image();
-      img.src = link;
-      img.onload = function() {
-        // alert(this.width + 'x' + this.height);
-        console.log(this.width, this.height)
-      }
-    }
 
     const OCR = (imageUrl) => {
       Tesseract.recognize(
@@ -60,66 +114,33 @@ const Body = () => {
         formData.append('upload_preset', preset);
         try {
           const res = await axios.post(url, formData);
-          const imageUrl = res.data.secure_url;
+          const imageUrl = await res.data.secure_url;
           const image = await axios.post(`http://localhost:3000/api/upload`, {
             imageUrl
-          }).then(Swal.fire({
+          })
+          .then(Swal.fire({
             icon: 'success',
             title: 'File sudah ter-upload!',
             showConfirmButton: false,
             timer: 1500
-        }), checkSize(imageUrl)).then(OCR(imageUrl)).then((text) => setText(text))
-
-          setImage(image.data);
+          }))
+          .then(checkSize(imageUrl))
+          // .then(OCR(imageUrl))
+          // .then((text) => setText(text))
+          setImage(image.data)
           // console.log(image.data)
 
         } catch (err) {
+          // console.log(err)
             Swal.fire({
               icon: 'error',
-              title: 'Oops...',
+              title: err,
               text: 'Apa kamu sudah memilih file gambar? (.png/.jpg)?',
               footer: '<a href>Why do I have this issue?</a>'
             })
         }
     };
-
-    // split
-    // const split_4 = (imageUrl) => {
-    //   img.src=imageUrl;
-    //   var canvas = document.createElement('canvas'),
-    //   ctx = canvas.getContext('2d'),
-    //   parts = [],
-    //   img = new Image();
-  
-    //   img.onload = split_4;
-
-    //   var w2 = img.width / 2,
-    //       h2 = img.height / 2;
-
-    //   for(var i=0; i<4; i++) {
-    //     var x = (-w2*i) % (w2*2),
-    //         y = (h2*i)<=h2? 0 : -h2 ;
-
-    //     canvas.width = w2;
-    //     canvas.height = h2;
-
-    //     ctx.drawImage(this, x, y, w2*2, h2*2);
-
-    //     parts.push( canvas.toDataURL() );
-
-    //     // for test div
-    //     var slicedImage = document.createElement('img')
-    //     slicedImage.src = parts[i];
-    //     var div = document.getElementById('test');
-    //     div.appendChild( slicedImage );
-
-    //   }
-
-    //     console.log( parts );
-
-    //   }
-
-      
+    
     // function to view the latest with GET req.
     // useEffect(() => {
     //     try{
@@ -139,6 +160,22 @@ const Body = () => {
     return(
         <>  
             <BodyContainer>
+              <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle>
+              <BodyFormButton>
+                  <input type="checkbox" id="Senin" name="Senin" value="Senin" onChange={() => setButtonhandler(button, 'senin')}/>
+                  <label htmlFor="vehicle1"> Senin</label><br/>
+                  <input type="checkbox" id="Selasa" name="Selasa" value="Selasa" onChange={() => setButtonhandler(button, 'selasa')}/>
+                  <label htmlFor="vehicle2"> Selasa</label><br/>
+                  <input type="checkbox" id="Rabu" name="Rabu" value="Rabu" onChange={() => setButtonhandler(button, 'rabu')}/>
+                  <label htmlFor="vehicle3"> Rabu</label><br/>
+                  <input type="checkbox" id="Kamis" name="Kamis" value="Kamis" onChange={() => setButtonhandler(button, 'kamis')}/>
+                  <label htmlFor="vehicle3"> Kamis</label><br/>
+                  <input type="checkbox" id="Jumat" name="Jumat" value="Jumat" onChange={() => setButtonhandler(button, 'jumat')}/>
+                  <label htmlFor="vehicle3"> Jumat</label><br/>
+                  <input type="checkbox" id="Sabtu" name="Sabtu" value="Sabtu" onChange={() => setButtonhandler(button, 'sabtu')}/>
+                  <label htmlFor="vehicle3"> Sabtu</label><br/>
+                  {/* <BodyButton onClick={onSubmit} >Upload</BodyButton> */}
+              </BodyFormButton>
             <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
             <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
             <BodyForm>

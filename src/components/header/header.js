@@ -10,8 +10,8 @@ const Header = () => {
     return(
         <>
             <HeaderContainer>
-                <HeaderTitle>SIAK Jadwal Generator</HeaderTitle>
-                <HeaderDescription>Website ini akan mengubah SS SIAKNG menajadi JSON dan .ICS file.</HeaderDescription>
+                <HeaderTitle>Jadwal SIAKNG Generator</HeaderTitle>
+                <HeaderDescription>Website ini akan mengubah SS SIAKNG menjadi JSON dan .ICS file.</HeaderDescription>
             </HeaderContainer>
         </>
     )

@@ -20,6 +20,10 @@ export const BodyForm = styled.div`
 
 `
 
+export const BodyFormButton = styled.div`
+    display: inline;
+`
+
 export const BodyButton = styled.button`
     font-size: 1.5rem;  
     border: none;
@@ -51,6 +55,8 @@ export const BodyInput = styled.input`
 export const BodyTextArea = styled.textarea`
     width: 20rem;
     font-size: 20px;
+    height: 20rem;
+    width: 50rem;
 `
 
 export const BodyImage = styled.img`
