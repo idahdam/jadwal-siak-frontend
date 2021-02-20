@@ -16,7 +16,7 @@ export const BodyDesc = styled.p`
 
 `
 
-export const BodyForm = styled.form`
+export const BodyForm = styled.div`
 
 `
 
