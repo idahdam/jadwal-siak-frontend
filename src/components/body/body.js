@@ -91,12 +91,14 @@ const Body = () => {
       const worker = createWorker({
         logger: m => console.log(m)
       });
-      
+
+
       (async () => {
         await worker.load();
         await worker.loadLanguage('eng');
         await worker.initialize('eng');
         const { data: { text } } = await worker.recognize(imageUrl, imagePos);
+        console.log(imagePos)
         console.log(text);
         setTextArea(text);
         await worker.terminate();
@@ -115,17 +117,17 @@ const Body = () => {
       alert('on build.')
     }
 
-    const OCR = (imageUrl) => {
-      Tesseract.recognize(
-        imageUrl,
-        'eng',
-        { logger: m => console.log(m) }
-      ).then(({ data: { text } }) => {
-        // console.log(text);
-        setImage(imageUrl)
-        setText(text)
-      })
-    }
+    // const OCR = (imageUrl) => {
+    //   Tesseract.recognize(
+    //     imageUrl,
+    //     'eng',
+    //     { logger: m => console.log(m) }
+    //   ).then(({ data: { text } }) => {
+    //     // console.log(text);
+    //     setImage(imageUrl)
+    //     setText(text)
+    //   })
+    // }
 
     const onSubmit = async () => {
         const formData = new FormData();
