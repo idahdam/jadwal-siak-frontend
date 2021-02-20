@@ -1,0 +1,18 @@
+{
+    "senin" : [
+        {
+            "mata kuliah": "analisis vektor",
+            "mulai": "08.00",
+            "berakhir" : "09.40",
+            "ruang" : "GK.203"
+        },
+        {
+
+        }
+    ],
+    "selasa" : [],
+    "rabu" : [],
+    "kamis" : [],
+    "jumat" : [],
+    "sabtu" : []    
+}

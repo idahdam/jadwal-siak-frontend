@@ -49,6 +49,13 @@ export const BodyInput = styled.input`
 `
 
 export const BodyTextArea = styled.textarea`
-    resize: none;
+    width: 20rem;
     font-size: 20px;
+`
+
+export const BodyImage = styled.img`
+    width: auto;
+    height: auto;
+    box-sizing: border-box;
+    font-size: 1rem;
 `
