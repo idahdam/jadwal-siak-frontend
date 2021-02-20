@@ -9,10 +9,10 @@ import {
     BodyButton
 } from './body.elements'
 import axios from 'axios';
-import loadingGif from '../../images/spinner.gif';
 
-const preset = 'uaq9suqt';
-const url = 'https://api.cloudinary.com/v1_1/dxsh8co1d/image/upload';
+const {REACT_APP_PRESET_NAME, REACT_APP_CLOUD_URL, REACT_APP_LOCAL_API} = process.env;
+const preset = REACT_APP_PRESET_NAME;
+const url =  REACT_APP_CLOUD_URL;
 
 
 const Body = () => {
@@ -32,7 +32,7 @@ const Body = () => {
           setLoading(true);
           const res = await axios.post(url, formData);
           const imageUrl = res.data.secure_url;
-          const image = await axios.post('http://localhost:3000/api/upload', {
+          const image = await axios.post('http://${REACT_APP_LOCAL_API}/upload', {
             imageUrl
           });
           setLoading(false);
@@ -44,32 +44,15 @@ const Body = () => {
 
     useEffect(() => {
         async function fetchImage() {
-          const image = await axios.get('http://localhost:3000/api/getLatest');
+          const image = await axios.get('http://${REACT_APP_LOCAL_API}/getLatest');
           setImage(image.data);
         }
         fetchImage();
-        // eslint-disable-next-line
     }, []);
 
 
     return(
         <>  
-            {/* <BodyContainer>
-                <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
-                <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
-                <BodyForm>
-                    <BodyInput type="file"name="image"onChange={onChange}/>
-                    <button onClick={onSubmit} className='btn center'>
-                    upload
-                    </button>
-                </BodyForm>
-                <BodyDesc>File JSON ada pada Text Area berikut ini</BodyDesc>
-                <BodyTextArea  id="JSONArea" name="w3review" rows="20" cols="50" defaultValue="Empty...">
-                </BodyTextArea>
-                <BodyDesc>Klik tombol di bawah untuk mendownload file .ICS</BodyDesc>
-                <BodyButton>Download</BodyButton>
-            </BodyContainer> */}
-
             <BodyContainer>
             <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
             <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
