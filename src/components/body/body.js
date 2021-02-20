@@ -13,6 +13,7 @@ import {
 import Tesseract from 'tesseract.js';
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import { createWorker } from 'tesseract.js';
 
 const {REACT_APP_PRESET_NAME, REACT_APP_CLOUD_URL} = process.env;
 const preset = REACT_APP_PRESET_NAME;
@@ -20,7 +21,7 @@ const url =  REACT_APP_CLOUD_URL;
 
 const Body = () => {
     const dayArray = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"]
-    const [image, setImage] = useState('');
+    const [image, setImage] = useState(null);
     const [text, setText] = useState('');
     const [button, setButton] = useState({
       senin: false,
@@ -45,30 +46,27 @@ const Body = () => {
       button[day] = !button[day]
       console.log(button)
     }
-
-    const setImagePostHandler = () => {
-      
-    }
     
     const setImageResHandler = (a, b) => {
       imageRes['width'] = a
       imageRes['height'] = b
       // console.log(imageRes)
+      imagePos['height'] = imageRes['height']
       if(imageRes['width'] <= 1366 && imageRes['width'] >= 1200){
+        console.log(imagePos)
         setImagePos({
           top: 0,
           left: 0,
-          width: 0,
-          height: 0
+          width: 10,
+          height: imageRes['height']
         })
       }
       else if(imageRes['width'] < 1920 && imageRes['width'] >= 1440){
-        console.log('full hd')
         setImagePos({
           top: 0,
           left: 0,
-          width: 0,
-          height: 0
+          width: 100,
+          height: imageRes['height']
         })
       }
     }
@@ -77,13 +75,34 @@ const Body = () => {
       const img = new Image();
       img.src = link;
       img.onload = function() {
-        // alert(this.width + 'x' + this.height);
         console.log(this.width, this.height)
         setImageResHandler(this.width, this.height)
       }
     }
 
+    const iterOCR = (imageUrl) => {
+      var i = 0;
+      // // for(i = 0; i<7; i++){
+      //   if(button[dayArray[0]] === true){
+      // console.log(button[dayArray[0]])
 
+      // const rectangle = { left: 0, top: 0, width: imagePos['width'] - 50, height: imagePos['height'] };
+
+      const worker = createWorker({
+        logger: m => console.log(m)
+      });
+      
+      (async () => {
+        await worker.load();
+        await worker.loadLanguage('eng');
+        await worker.initialize('eng');
+        const { data: { text } } = await worker.recognize(imageUrl, imagePos);
+        console.log(text);
+        setTextArea(text);
+        await worker.terminate();
+      })();
+      imagePos["width"] += 40
+    }
     const setTextArea = (text) => {
       setText(text)
     }
@@ -96,7 +115,6 @@ const Body = () => {
       alert('on build.')
     }
 
-
     const OCR = (imageUrl) => {
       Tesseract.recognize(
         imageUrl,
@@ -104,6 +122,7 @@ const Body = () => {
         { logger: m => console.log(m) }
       ).then(({ data: { text } }) => {
         // console.log(text);
+        setImage(imageUrl)
         setText(text)
       })
     }
@@ -125,20 +144,20 @@ const Body = () => {
             timer: 1500
           }))
           .then(checkSize(imageUrl))
-          // .then(OCR(imageUrl))
-          // .then((text) => setText(text))
-          setImage(image.data)
-          // console.log(image.data)
-
+          .then(setImage(imageUrl))
+          .then(iterOCR(imageUrl))
+          .then(console.log(imageUrl))
+          .then((text) => setText(text))
+          
+          
         } catch (err) {
-          // console.log(err)
-            Swal.fire({
-              icon: 'error',
-              title: err,
-              text: 'Apa kamu sudah memilih file gambar? (.png/.jpg)?',
-              footer: '<a href>Why do I have this issue?</a>'
-            })
-        }
+          Swal.fire({
+            icon: 'error',
+            title: err,
+            text: 'Apa kamu sudah memilih file gambar? (.png/.jpg)?',
+            footer: '<a href>Why do I have this issue?</a>'
+          })
+        } 
     };
     
     // function to view the latest with GET req.
