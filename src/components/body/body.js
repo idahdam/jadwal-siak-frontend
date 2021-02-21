@@ -18,6 +18,8 @@ import Swal from 'sweetalert2';
 import { createWorker } from 'tesseract.js';
 import {
   setButtonhandler,
+  parseText,
+  data
 } from './logic'
 
 const {REACT_APP_PRESET_NAME, REACT_APP_CLOUD_URL} = process.env;
@@ -84,6 +86,8 @@ const Body = () => {
         const { data: { text } } = await worker.recognize('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png', {rectangle});
         console.log(text);
         setTextArea(text);
+        parseText(text)
+        console.log(data)
         await worker.terminate();
       })();
     }
