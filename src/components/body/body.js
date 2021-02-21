@@ -19,6 +19,7 @@ import { createWorker } from 'tesseract.js';
 import {
   setButtonhandler,
   parseText,
+  JSONsafeStringify,
   data
 } from './logic'
 
@@ -94,7 +95,7 @@ const Body = () => {
     }
 
     const setTextArea = (text) => {
-      var dictJSON = JSON.stringify(text)
+      var dictJSON = JSONsafeStringify(text)
       setText(dictJSON)
     }
 
@@ -127,13 +128,11 @@ const Body = () => {
             timer: 1500
           }))
           .then(setShow(true))
-          // .then(setImage("imageUrl"))
           .then(setImage('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,e_blackwhite,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png'))
+          // .then(setImage("imageUrl"))
           // .then(iterOCR(imageUrl, imagePos))
           // .then(console.log(imageUrl))
           // .then((text) => setText(text))
-          
-          
         } catch (err) {
           Swal.fire({
             icon: 'error',
