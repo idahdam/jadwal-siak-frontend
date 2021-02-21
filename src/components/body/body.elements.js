@@ -60,7 +60,7 @@ export const BodyTextArea = styled.textarea`
 `
 
 export const BodyImage = styled.img`
-    width: auto;
+    width: 50%;
     height: auto;
     box-sizing: border-box;
     font-size: 1rem;

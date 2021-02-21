@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useCallback } from 'react'
 import { 
     BodyContainer,
     BodyTitle,
@@ -12,8 +12,13 @@ import {
 } from './body.elements'
 import Tesseract from 'tesseract.js';
 import axios from 'axios';
+import ReactCrop from 'react-image-crop'
+import 'react-image-crop/dist/ReactCrop.css'
 import Swal from 'sweetalert2';
 import { createWorker } from 'tesseract.js';
+import {
+  setButtonhandler,
+} from './logic'
 
 const {REACT_APP_PRESET_NAME, REACT_APP_CLOUD_URL} = process.env;
 const preset = REACT_APP_PRESET_NAME;
@@ -21,6 +26,8 @@ const url =  REACT_APP_CLOUD_URL;
 
 const Body = () => {
     const dayArray = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"]
+    const [crop, setCrop] = useState({ unit: '%', width: 30 });
+    const [completedCrop, setCompletedCrop] = useState(null);
     const [image, setImage] = useState(null);
     const [text, setText] = useState('');
     const [button, setButton] = useState({
@@ -42,69 +49,46 @@ const Body = () => {
       height: 0,
     })
 
-    const setButtonhandler = (button, day) => {
-      button[day] = !button[day]
-      console.log(button)
+    const handleImageLoaded = (image) => {
+      // console.log(image)
+    } 
+
+    const handleOnCropChange = (crop) => {
+      setCrop(crop)
+      // console.log({crop: crop})
+    }
+
+    const handleOnCropComplete = (crop, pixelCrop) => {
+      setCompletedCrop(crop)
+      console.log(crop, pixelCrop)
     }
     
-    const setImageResHandler = (a, b) => {
-      imageRes['width'] = a
-      imageRes['height'] = b
-      // console.log(imageRes)
-      imagePos['height'] = imageRes['height']
-      if(imageRes['width'] <= 1366 && imageRes['width'] >= 1200){
-        console.log(imagePos)
-        setImagePos({
-          top: 0,
-          left: 0,
-          width: 10,
-          height: imageRes['height']
-        })
-      }
-      else if(imageRes['width'] < 1920 && imageRes['width'] >= 1440){
-        setImagePos({
-          top: 0,
-          left: 0,
-          width: 100,
-          height: imageRes['height']
-        })
-      }
-    }
-
-    const checkSize = (link) => {
-      const img = new Image();
-      img.src = link;
-      img.onload = function() {
-        console.log(this.width, this.height)
-        setImageResHandler(this.width, this.height)
-      }
-    }
-
     const iterOCR = (imageUrl) => {
       var i = 0;
       // // for(i = 0; i<7; i++){
       //   if(button[dayArray[0]] === true){
       // console.log(button[dayArray[0]])
 
-      // const rectangle = { left: 0, top: 0, width: imagePos['width'] - 50, height: imagePos['height'] };
+      const rectangle = { left: 0, top: 0, width: 265.375, height: 694 };
 
       const worker = createWorker({
         logger: m => console.log(m)
       });
 
-
+      // replace rectangle with imagePos
       (async () => {
         await worker.load();
         await worker.loadLanguage('eng');
         await worker.initialize('eng');
-        const { data: { text } } = await worker.recognize(imageUrl, imagePos);
+        const { data: { text } } = await worker.recognize(imageUrl, {rectangle});
         console.log(imagePos)
         console.log(text);
-        setTextArea(text);
+        // setTextArea(text);
         await worker.terminate();
       })();
       imagePos["width"] += 40
     }
+
     const setTextArea = (text) => {
       setText(text)
     }
@@ -116,18 +100,6 @@ const Body = () => {
     const alertPeep = () => {
       alert('on build.')
     }
-
-    // const OCR = (imageUrl) => {
-    //   Tesseract.recognize(
-    //     imageUrl,
-    //     'eng',
-    //     { logger: m => console.log(m) }
-    //   ).then(({ data: { text } }) => {
-    //     // console.log(text);
-    //     setImage(imageUrl)
-    //     setText(text)
-    //   })
-    // }
 
     const onSubmit = async () => {
         const formData = new FormData();
@@ -145,11 +117,11 @@ const Body = () => {
             showConfirmButton: false,
             timer: 1500
           }))
-          .then(checkSize(imageUrl))
+          // .then(checkSize(imageUrl))
           .then(setImage(imageUrl))
           .then(iterOCR(imageUrl))
           .then(console.log(imageUrl))
-          .then((text) => setText(text))
+          // .then((text) => setText(text))
           
           
         } catch (err) {
@@ -161,22 +133,6 @@ const Body = () => {
           })
         } 
     };
-    
-    // function to view the latest with GET req.
-    // useEffect(() => {
-    //     try{
-    //       async function fetchImage() {
-    //         // const image = await axios.get(`http://localhost:3000/api/getLatest`);
-    //         const image = await image
-    //         setImage(image.data);
-    //         console.log(image.data)
-    //       }
-    //       fetchImage();
-    //     }
-    //     catch(e){
-    //       setImage(`https://miro.medium.com/max/534/1*wUOrpv-selJOytCkslSIhg.png`)
-    //     }
-    // }, []);
 
     return(
         <>  
@@ -184,18 +140,17 @@ const Body = () => {
               <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle>
               <BodyFormButton>
                   <input type="checkbox" id="Senin" name="Senin" value="Senin" onChange={() => setButtonhandler(button, 'senin')}/>
-                  <label htmlFor="vehicle1"> Senin</label><br/>
+                  <label > Senin</label><br/>
                   <input type="checkbox" id="Selasa" name="Selasa" value="Selasa" onChange={() => setButtonhandler(button, 'selasa')}/>
-                  <label htmlFor="vehicle2"> Selasa</label><br/>
+                  <label > Selasa</label><br/>
                   <input type="checkbox" id="Rabu" name="Rabu" value="Rabu" onChange={() => setButtonhandler(button, 'rabu')}/>
-                  <label htmlFor="vehicle3"> Rabu</label><br/>
+                  <label > Rabu</label><br/>
                   <input type="checkbox" id="Kamis" name="Kamis" value="Kamis" onChange={() => setButtonhandler(button, 'kamis')}/>
-                  <label htmlFor="vehicle3"> Kamis</label><br/>
+                  <label > Kamis</label><br/>
                   <input type="checkbox" id="Jumat" name="Jumat" value="Jumat" onChange={() => setButtonhandler(button, 'jumat')}/>
-                  <label htmlFor="vehicle3"> Jumat</label><br/>
+                  <label > Jumat</label><br/>
                   <input type="checkbox" id="Sabtu" name="Sabtu" value="Sabtu" onChange={() => setButtonhandler(button, 'sabtu')}/>
-                  <label htmlFor="vehicle3"> Sabtu</label><br/>
-                  {/* <BodyButton onClick={onSubmit} >Upload</BodyButton> */}
+                  <label > Sabtu</label><br/>
               </BodyFormButton>
             <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
             <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
@@ -204,7 +159,17 @@ const Body = () => {
                     <BodyButton onClick={onSubmit} >Upload</BodyButton>
             </BodyForm>
                     <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
-                    <BodyImage src={image} alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
+                    <BodyImage src={image} id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
+                    <BodyDesc>Silakan crop berdasarkan hari:</BodyDesc>
+                    <br/>
+                    <ReactCrop 
+                      width={50}
+                      src={image}
+                      crop={crop}
+                      onImageLoaded={handleImageLoaded}
+                      onChange={(c) => handleOnCropChange(c)}
+                      onComplete={(c) => handleOnCropComplete(c)}
+                    />
                     <BodyDesc>Berikut versi JSON:</BodyDesc>
                     <BodyTextArea placeholder="Text area ini bisa di-stretch." value={text} onChange={() => setTextArea(text)}></BodyTextArea>
                     <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
