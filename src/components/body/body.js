@@ -40,8 +40,8 @@ const Body = () => {
       sabtu: false
     })
     const [imagePos, setImagePos] = useState({
-      top: 0,
       left: 0,
+      top: 0,
       width: 0,
       height: 0
     })
@@ -65,23 +65,27 @@ const Body = () => {
       })
     }
     
-    const iterOCR = (imageUrl) => {
-      // const rectangle = { "left": completedCrop.x, "top": completedCrop.y, "width": completedCrop.width, "height": completedCrop.height };
+    const iterOCR = (imageUrl, imagePos) => {
+      const rectangle = { left: imagePos.left, top: imagePos.top, width: imagePos.width, height: imagePos.height };
+ 
       console.log(imagePos)
-      // const worker = createWorker({
-      //   logger: m => console.log(m)
-      // });
+      console.log(imageUrl)
+      console.log(rectangle)
 
-      // // replace rectangle with imagePos
-      // (async () => {
-      //   await worker.load();
-      //   await worker.loadLanguage('eng');
-      //   await worker.initialize('eng');
-      //   const { data: { text } } = await worker.recognize(imageUrl, {rectangle});
-      //   console.log(text);
-      //   // setTextArea(text);
-      //   await worker.terminate();
-      // })();
+      const worker = createWorker({
+        logger: m => console.log(m)
+      });
+
+      // replace rectangle with imagePos, imgurl
+      (async () => {
+        await worker.load();
+        await worker.loadLanguage('ind');
+        await worker.initialize('ind');
+        const { data: { text } } = await worker.recognize('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png', {rectangle});
+        console.log(text);
+        setTextArea(text);
+        await worker.terminate();
+      })();
     }
 
     const setTextArea = (text) => {
@@ -96,8 +100,8 @@ const Body = () => {
       alert('on build.')
     }
 
-    const onClickSet = (imagePos, crop) => {
-      console.log(crop)
+    const onClickSet = (imagePos, image) => {
+      iterOCR(image, imagePos)
     }
 
     const onSubmit = async () => {
@@ -116,12 +120,11 @@ const Body = () => {
             showConfirmButton: false,
             timer: 1500
           }))
-          // .then(checkSize(imageUrl))
           .then(setShow(true))
-          .then(setImage(imageUrl))
-          .then(iterOCR(imageUrl, imagePos))
+          // .then(setImage("imageUrl"))
+          .then(setImage('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,e_blackwhite,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png'))
+          // .then(iterOCR(imageUrl, imagePos))
           // .then(console.log(imageUrl))
-          // .then(console.log(imagePos))
           // .then((text) => setText(text))
           
           
@@ -135,12 +138,10 @@ const Body = () => {
         } 
     };
 
-
-
     return(
         <>  
           <BodyContainer>
-            {show ? 
+            {/* {show ? 
             <>
               <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
               <BodyImage src={image} id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
@@ -153,7 +154,7 @@ const Body = () => {
                 onComplete={(c) => handleOnCropComplete(c)}
               />
               <p>top: {crop.y}, left: {crop.x}, width: {crop.width}, height: {crop.height}</p>
-              <BodyButton onClick={({crop}) => onClickSet({crop})}>Set</BodyButton>
+              <BodyButton onClick={() => onClickSet(imagePos, image)}>Set</BodyButton>
               <BodyDesc>Berikut versi JSON:</BodyDesc>
               <BodyTextArea placeholder="Text area ini bisa di-stretch." value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
               <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
@@ -179,11 +180,52 @@ const Body = () => {
               <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
               <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
               <BodyForm>
-                <BodyInput type='file' name='image' onChange={onChange} />
-                <BodyButton onClick={onSubmit} >Upload</BodyButton>
+              <BodyInput type='file' name='image' onChange={onChange} />
+              <BodyButton onClick={onSubmit} >Upload</BodyButton>
               </BodyForm>
-          </>
-          }
+              </>
+            } */}
+
+            <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle>
+            <BodyFormButton>
+              <input type="checkbox" id="Senin" name="Senin" value="Senin" onChange={() => setButtonhandler(button, 'senin')}/>
+              <label > Senin</label><br/>
+              <input type="checkbox" id="Selasa" name="Selasa" value="Selasa" onChange={() => setButtonhandler(button, 'selasa')}/>
+              <label > Selasa</label><br/>
+              <input type="checkbox" id="Rabu" name="Rabu" value="Rabu" onChange={() => setButtonhandler(button, 'rabu')}/>
+              <label > Rabu</label><br/>
+              <input type="checkbox" id="Kamis" name="Kamis" value="Kamis" onChange={() => setButtonhandler(button, 'kamis')}/>
+              <label > Kamis</label><br/>
+              <input type="checkbox" id="Jumat" name="Jumat" value="Jumat" onChange={() => setButtonhandler(button, 'jumat')}/>
+              <label > Jumat</label><br/>
+              <input type="checkbox" id="Sabtu" name="Sabtu" value="Sabtu" onChange={() => setButtonhandler(button, 'sabtu')}/>
+              <label > Sabtu</label><br/>
+            </BodyFormButton>
+            <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
+            <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
+            <BodyForm>
+              <BodyInput type='file' name='image' onChange={onChange} />
+              <BodyButton onClick={onSubmit} >Upload</BodyButton>
+            </BodyForm>
+
+              {/* api limit, change image to url */}
+              <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
+              <BodyImage src='https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,e_blackwhite,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png' id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
+              <BodyDesc>Silakan crop berdasarkan hari:</BodyDesc>
+              <ReactCrop 
+                src='https://res.cloudinary.com/dxsh8co1d/image/upload/c_scale,e_negate,o_100,q_100,w_1205,z_2.9/v1613893875/Screenshot_43_ze84hi.png'
+                crop={crop}
+                onImageLoaded={handleImageLoaded}
+                onChange={(c) => handleOnCropChange(c)}
+                onComplete={(c) => handleOnCropComplete(c)}
+              />
+              <p>top: {crop.y}, left: {crop.x}, width: {crop.width}, height: {crop.height}</p>
+              <BodyButton onClick={() => onClickSet(imagePos, image)}>Set</BodyButton>
+              <BodyDesc>Berikut versi JSON:</BodyDesc>
+              <BodyTextArea placeholder="Text area ini bisa di-stretch." value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
+              <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
+              <BodyButton onClick={alertPeep} >Download</BodyButton>
+
           </BodyContainer>
         </>
     )}   

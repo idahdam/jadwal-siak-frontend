@@ -16,6 +16,7 @@
     "react-image-crop": "^8.6.6",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.2",
+    "replace-color": "^2.3.0",
     "styled-components": "^5.2.1",
     "sweetalert2": "^10.15.5",
     "tesseract.js": "^2.1.1",
