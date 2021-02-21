@@ -9,6 +9,9 @@ export const parseText = (text) => {
         data["senin"] = {}
         if(text.includes("Analisis Algoritma")){
             data["senin"]["mata kuliah"] = "Analisis Algoritma"
+            data["senin"]["jam mulai"] = "08.00"
+            data["senin"]["jam selesai"] = "09.40"
+            data["senin"]["ruang"] = "GK 304"
         }
     }
     else if(text.includes("Selasa") || text.includes("selasa")){

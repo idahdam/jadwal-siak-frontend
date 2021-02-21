@@ -85,15 +85,17 @@ const Body = () => {
         await worker.initialize('ind');
         const { data: { text } } = await worker.recognize('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png', {rectangle});
         console.log(text);
-        setTextArea(text);
         parseText(text)
-        console.log(data)
+        setTextArea(data);
+        // console.log(data)
         await worker.terminate();
       })();
+
     }
 
     const setTextArea = (text) => {
-      setText(text)
+      var dictJSON = JSON.stringify(text)
+      setText(dictJSON)
     }
 
     const onChange = e => {
