@@ -4,40 +4,35 @@ export const setButtonhandler = (button, day) => {
 }
 
 export const parseText = (text) => {
-    if(text.includes("Senin") || text.includes("senin")){
-        console.log('senin exists.')
-        data["senin"] = {}
-        if(text.includes("Analisis Algoritma")){
-            data["senin"]["Analisis Algoritma"] = 
-            {
-                "mulai" : "0800",
-                "selesai" : "0900",
-                "ruang kelas": "GK 304"
+    const dayArray = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"]
+    var i = 0, j = 0
+    for(i = 0; i<6; i++){
+        if(text.includes(dayArray[i])){
+            console.log(`${dayArray[i]} exists`)
+            data[`${dayArray[i]}`] = {}
+            console.log(jadwal[dayArray[i]][0][0]["nama"])
+            console.log(jadwal[dayArray[i]])
+            for(j = 0; j < 3; j++){
+                data[`${dayArray[i]}`][`Matakuliah ke-${j+1}`] = {}
+                if(text.includes(jadwal[dayArray[i]][j][0]["nama"])){
+                        var nama = jadwal[dayArray[i]][j][0]["nama"]
+                        var mulai = jadwal[dayArray[i]][j][0]["jam mulai"]
+                        var selesai = jadwal[dayArray[i]][j][0]["jam selesai"]
+                        var ruang = jadwal[dayArray[i]][j][0]["ruang"]
+                        data[`${dayArray[i]}`][`Matakuliah ke-${j+1}`].nama = nama
+                        data[`${dayArray[i]}`][`Matakuliah ke-${j+1}`].mulai = mulai
+                        data[`${dayArray[i]}`][`Matakuliah ke-${j+1}`].selesai = selesai
+                        data[`${dayArray[i]}`][`Matakuliah ke-${j+1}`].ruang = ruang
+                }
             }
         }
-        if(text.includes("Jaringan Komputer dan Praktikum")){
-            data["senin"]["Jaringan Komputer dan Praktikum"] = 
-            {
-                "mulai" : "0800",
-                "selesai" : "0900",
-                "ruang kelas": "Lab Puskom 201"
-            }
+        else{
+            continue
         }
-        if(text.includes("Sistem Siber-Fisik dan Praktikum")){
-            data["senin"]["Sistem Siber-Fisik dan Praktikum"] = 
-            {
-                "mulai" : "0800",
-                "selesai" : "0900",
-                "ruang kelas": "S.203"
-            }
-        }
-    }
-    else if(text.includes("Selasa") || text.includes("selasa")){
-
     }
 }
 
-export const data = 
+export const data =  
 {}
 
 export const JSONsafeStringify = (obj, indent = 2) => {
@@ -54,18 +49,48 @@ export const JSONsafeStringify = (obj, indent = 2) => {
     );
     cache = null;
     return retVal;
-  };
+};
 
+var jadwal = 
+{
+    "Senin" : 
+    [
+        [{
+            "nama" : "Analisis Algoritma",
+            "jam mulai" : "08.00",
+            "jam selesai": "09.40",
+            "ruang": "GK403"
+        }],
+        [{
+            "nama" : "Jaringan Komputer dan Praktikum",
+            "jam mulai" : "08.00",
+            "jam selesai": "09.40",
+            "ruang": "Lab Puskom 201"
+        }],
+        [{
+            "nama" : "Sistem Siber-Fisik dan Praktikum",
+            "jam mulai" : "08.00",
+            "jam selesai": "0940",
+            "ruang": "S.203"
+        }],
+        // lanjutin aja
+        [{}],
+        [{}]
 
-// var dict = 
-// {
-//     "one" : [15, 4.5],
-//     "two" : [34, 3.3],
-//     "three" : [67, 5.0],
-//     "four" : [32, 4.1]
-// };
-
-// dict["five"] = [22, 5.0]
-
-// var dictJSON = JSON.stringify(dict)
-// console.log(dictJSON)
+    ],
+    "Selasa" : 
+    [
+        [{
+            "nama" : "Jaringan Komputer dan Praktikum",
+            "jam mulai" : "13.00",
+            "jam selesai": "15.30",
+            "ruang": "S.203"
+        }],
+        [{
+            "nama" : "Profesionalisme dan Etika dalam Teknologi",
+            "jam mulai" : "08.00",
+            "jam selesai": "09.40",
+            "ruang": "-"
+        }],
+    ]
+}
