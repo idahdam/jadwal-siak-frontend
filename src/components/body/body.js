@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { 
     BodyContainer,
     BodyTitle,
@@ -81,6 +81,7 @@ const Body = () => {
 
       // replace rectangle with imagePos, imgurl
       (async () => {
+        try{
         await worker.load();
         await worker.loadLanguage('ind');
         await worker.initialize('ind');
@@ -90,12 +91,21 @@ const Body = () => {
         setTextArea(data);
         // console.log(data)
         await worker.terminate();
+        }
+        catch(e){
+          Swal.fire({
+            icon: 'error',
+            title: e,
+            text: 'Apa kamu sudah memilih area?',
+            footer: '<a href="https://google.com">Why do I have this issue?</a>'
+          })
+        }
       })();
 
     }
 
-    const setTextArea = (text) => {
-      var dictJSON = JSONsafeStringify(text)
+    const setTextArea = (a) => {
+      var dictJSON = JSONsafeStringify(a)
       setText(dictJSON)
     }
 
