@@ -68,6 +68,14 @@ const Body = () => {
       })
     }
     
+    const manipulateURL = (imageUrl) => {
+      var str = imageUrl
+      var pos = str.indexOf('upload/')
+      var blackWhiteUrl = str.slice(0, pos+1) + "c_mfit,h_694,o_100,q_100,w_1205,z_1/" + str.slice(pos);
+      console.log(blackWhiteUrl)
+      // return blackWhiteUrl
+    }
+
     const iterOCR = (imageUrl, imagePos) => {
       const rectangle = { left: imagePos.left, top: imagePos.top, width: imagePos.width, height: imagePos.height };
  
@@ -118,7 +126,10 @@ const Body = () => {
     }
 
     const onClickSet = (imagePos, image) => {
+      // setImage('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,e_blackwhite,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png')
+      // manipulateURL(image)
       iterOCR(image, imagePos)
+      // manipulateURL(image)
     }
 
     const onSubmit = async () => {
@@ -138,11 +149,8 @@ const Body = () => {
             timer: 1500
           }))
           .then(setShow(true))
-          .then(setImage('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,e_blackwhite,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png'))
-          // .then(setImage("imageUrl"))
-          // .then(iterOCR(imageUrl, imagePos))
-          // .then(console.log(imageUrl))
-          // .then((text) => setText(text))
+          .then(setImage(imageUrl))
+
         } catch (err) {
           Swal.fire({
             icon: 'error',
@@ -225,10 +233,10 @@ const Body = () => {
 
               {/* api limit, change image to url */}
               <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
-              <BodyImage src='https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,e_blackwhite,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png' id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
+              <BodyImage src={image} id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
               <BodyDesc>Silakan crop berdasarkan hari:</BodyDesc>
               <ReactCrop 
-                src='https://res.cloudinary.com/dxsh8co1d/image/upload/c_scale,e_negate,o_100,q_100,w_1205,z_2.9/v1613893875/Screenshot_43_ze84hi.png'
+                src={image}
                 crop={crop}
                 onImageLoaded={handleImageLoaded}
                 onChange={(c) => handleOnCropChange(c)}
