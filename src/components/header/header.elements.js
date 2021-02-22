@@ -18,3 +18,9 @@ export const HeaderDescription = styled.p`
     text-align: center;
     font-size: 1.5rem;
 `
+
+export const HeaderLink = styled.p`
+    color: white;
+    font-size: 1.5rem;
+    text-align: center;
+`

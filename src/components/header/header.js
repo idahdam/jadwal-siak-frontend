@@ -1,17 +1,22 @@
 import React from 'react'
+import { Route } from 'react-router-dom'
 import { Container } from '../../globalStyles'
 import {
     HeaderContainer,
     HeaderTitle,
     HeaderDescription,
+    HeaderLink,
 } from './header.elements'
 
-const Header = () => {
+const Header = ({headerTitle, headerDescription, headerLink, link}) => {
     return(
         <>
             <HeaderContainer>
-                <HeaderTitle>Jadwal SIAKNG Generator</HeaderTitle>
-                <HeaderDescription>Website ini akan mengubah SS SIAKNG menjadi JSON dan .ICS file.</HeaderDescription>
+                <HeaderTitle>{headerTitle}</HeaderTitle>
+                <HeaderDescription>{headerDescription}</HeaderDescription>
+                <a href={link}>
+                    <HeaderLink>{headerLink}</HeaderLink>
+                </a>
             </HeaderContainer>
         </>
     )
