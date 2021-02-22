@@ -93,7 +93,7 @@ const Body = () => {
         await worker.load();
         await worker.loadLanguage('ind');
         await worker.initialize('ind');
-        const { data: { text } } = await worker.recognize('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png', {rectangle});
+        const { data: { text } } = await worker.recognize('https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png', {rectangle});
         console.log(text);
         parseText(text)
         setTextArea(data);
@@ -122,7 +122,7 @@ const Body = () => {
     };
 
     const alertPeep = () => {
-      alert('on build.')
+      alert('ngga diaktifin dulu biar ga rate limit server hehe')
     }
 
     const onClickSet = (imagePos, image) => {
@@ -164,51 +164,6 @@ const Body = () => {
     return(
         <>  
           <BodyContainer>
-            {/* {show ? 
-            <>
-              <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
-              <BodyImage src={image} id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
-              <BodyDesc>Silakan crop berdasarkan hari:</BodyDesc>
-              <ReactCrop 
-                src={image}
-                crop={crop}
-                onImageLoaded={handleImageLoaded}
-                onChange={(c) => handleOnCropChange(c)}
-                onComplete={(c) => handleOnCropComplete(c)}
-              />
-              <p>top: {crop.y}, left: {crop.x}, width: {crop.width}, height: {crop.height}</p>
-              <BodyButton onClick={() => onClickSet(imagePos, image)}>Set</BodyButton>
-              <BodyDesc>Berikut versi JSON:</BodyDesc>
-              <BodyTextArea placeholder="Text area ini bisa di-stretch." value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
-              <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
-              <BodyButton onClick={alertPeep} >Download</BodyButton>
-            </>
-            : 
-            <>
-              <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle>
-              <BodyFormButton>
-                <input type="checkbox" id="Senin" name="Senin" value="Senin" onChange={() => setButtonhandler(button, 'senin')}/>
-                <label > Senin</label><br/>
-                <input type="checkbox" id="Selasa" name="Selasa" value="Selasa" onChange={() => setButtonhandler(button, 'selasa')}/>
-                <label > Selasa</label><br/>
-                <input type="checkbox" id="Rabu" name="Rabu" value="Rabu" onChange={() => setButtonhandler(button, 'rabu')}/>
-                <label > Rabu</label><br/>
-                <input type="checkbox" id="Kamis" name="Kamis" value="Kamis" onChange={() => setButtonhandler(button, 'kamis')}/>
-                <label > Kamis</label><br/>
-                <input type="checkbox" id="Jumat" name="Jumat" value="Jumat" onChange={() => setButtonhandler(button, 'jumat')}/>
-                <label > Jumat</label><br/>
-                <input type="checkbox" id="Sabtu" name="Sabtu" value="Sabtu" onChange={() => setButtonhandler(button, 'sabtu')}/>
-                <label > Sabtu</label><br/>
-              </BodyFormButton>
-              <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
-              <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
-              <BodyForm>
-              <BodyInput type='file' name='image' onChange={onChange} />
-              <BodyButton onClick={onSubmit} >Upload</BodyButton>
-              </BodyForm>
-              </>
-            } */}
-
             <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle>
             <BodyFormButton>
               <input type="checkbox" id="Senin" name="Senin" value="Senin" onChange={() => setButtonhandler(button, 'senin')}/>
@@ -228,15 +183,17 @@ const Body = () => {
             <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
             <BodyForm>
               <BodyInput type='file' name='image' onChange={onChange} />
-              <BodyButton onClick={onSubmit} >Upload</BodyButton>
+              {/* <BodyButton onClick={onSubmit} >Upload</BodyButton> */}
+              <BodyButton onClick={alertPeep} >Upload</BodyButton>
             </BodyForm>
-
+            {/* { show ? 
+              <> */}
               {/* api limit, change image to url */}
               <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
-              <BodyImage src={image} id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
+              <BodyImage src='https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png' id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
               <BodyDesc>Silakan crop berdasarkan hari:</BodyDesc>
               <ReactCrop 
-                src={image}
+                src='https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png'
                 crop={crop}
                 onImageLoaded={handleImageLoaded}
                 onChange={(c) => handleOnCropChange(c)}
@@ -248,7 +205,8 @@ const Body = () => {
               <BodyTextArea placeholder="Text area ini bisa di-stretch." value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
               <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
               <BodyButton onClick={alertPeep} >Download</BodyButton>
-
+              {/* </>
+              : null} */}
           </BodyContainer>
         </>
     )}   
