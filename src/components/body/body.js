@@ -170,6 +170,7 @@ const Body = () => {
     }
 
     const onSubmit = async () => {
+        const config = {headers: { "X-Requested-With": "XMLHttpRequest" },}
         const formData = new FormData();
         formData.append('file', image);
         formData.append('upload_preset', preset);
@@ -178,7 +179,7 @@ const Body = () => {
           const imageUrl = await res.data.secure_url;
           const image = await axios.post(`http://jadwal-siak-backend.herokuapp.com/api/upload`, {
             imageUrl
-          })
+          }, config)
           .then(Swal.fire({
             icon: 'success',
             title: 'File sudah ter-upload!',
