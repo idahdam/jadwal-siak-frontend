@@ -106,7 +106,7 @@ const Body = () => {
         await worker.load();
         await worker.loadLanguage('ind');
         await worker.initialize('ind');
-        const { data: { text } } = await worker.recognize('https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png', {rectangle});
+        const { data: { text } } = await worker.recognize(imageUrl, {rectangle});
         console.log(text);
         setPreview(text)
         // parseText(text)
@@ -176,7 +176,7 @@ const Body = () => {
         try {
           const res = await axios.post(url, formData);
           const imageUrl = await res.data.secure_url;
-          const image = await axios.post(`http://localhost:3000/api/upload`, {
+          const image = await axios.post(`https://jadwal-siak-backend.herokuapp.com/api/upload`, {
             imageUrl
           })
           .then(Swal.fire({
@@ -216,10 +216,10 @@ const Body = () => {
             <BodyContainer>
               {/* api limit, change image to url */}
               <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
-              <BodyImage src='https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png' id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
+              <BodyImage src={image} id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
               <BodyDesc>Silakan crop berdasarkan hari:</BodyDesc>
               <ReactCrop 
-                src='https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png'
+                src={image}
                 crop={crop}
                 onImageLoaded={handleImageLoaded}
                 onChange={(c) => handleOnCropChange(c)}
