@@ -33,7 +33,7 @@ const Body = () => {
     const textAreaRef = useRef(null);
     const [crop, setCrop] = useState({ unit: '%'});
     const [completedCrop, setCompletedCrop] = useState(null);
-    const [show, setShow] = useState(false)
+    const [show, setShow] = useState(true)
     const [image, setImage] = useState(null);
     const [text, setText] = useState('');
     const [preview, setPreview] = useState('');
@@ -148,6 +148,13 @@ const Body = () => {
 
     const alertPeep = () => {
       alert('ngga diaktifin dulu biar ga rate limit server hehe')
+      setShow(!show)
+      Swal.fire({
+        icon: 'success',
+        title: 'File sudah ter-upload!',
+        showConfirmButton: false,
+        timer: 1500
+      })
     }
 
     const onScan = (imagePos, image) => {
@@ -193,22 +200,9 @@ const Body = () => {
 
     return(
         <>  
+        { show ? 
+          <>
           <BodyContainer>
-            {/* <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle> */}
-            {/* <BodyFormButton>
-              <input type="checkbox" id="Senin" name="Senin" value="Senin" onChange={() => setButtonhandler(button, 'senin')}/>
-              <label > Senin</label><br/>
-              <input type="checkbox" id="Selasa" name="Selasa" value="Selasa" onChange={() => setButtonhandler(button, 'selasa')}/>
-              <label > Selasa</label><br/>
-              <input type="checkbox" id="Rabu" name="Rabu" value="Rabu" onChange={() => setButtonhandler(button, 'rabu')}/>
-              <label > Rabu</label><br/>
-              <input type="checkbox" id="Kamis" name="Kamis" value="Kamis" onChange={() => setButtonhandler(button, 'kamis')}/>
-              <label > Kamis</label><br/>
-              <input type="checkbox" id="Jumat" name="Jumat" value="Jumat" onChange={() => setButtonhandler(button, 'jumat')}/>
-              <label > Jumat</label><br/>
-              <input type="checkbox" id="Sabtu" name="Sabtu" value="Sabtu" onChange={() => setButtonhandler(button, 'sabtu')}/>
-              <label > Sabtu</label><br/>
-            </BodyFormButton> */}
             <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
             <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
             <BodyForm>
@@ -216,8 +210,10 @@ const Body = () => {
               {/* <BodyButton onClick={onSubmit} >Upload</BodyButton> */}
               <BodyButton onClick={alertPeep} >Upload</BodyButton>
             </BodyForm>
-            {/* { show ? 
-              <> */}
+          </BodyContainer></> 
+          :
+            <>
+            <BodyContainer>
               {/* api limit, change image to url */}
               <BodyDesc>Berikut jadwal yang kamu upload: </BodyDesc>
               <BodyImage src='https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png' id="canvas" alt="Jika kamu melihat ini, kamu belum mengupload atau gagal."/>
@@ -241,11 +237,10 @@ const Body = () => {
               <BodyTextArea readOnly={true} placeholder="Area JSON" ref ={textAreaRef} id="textarea" value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
               <BodyFormButton onClick={(text) => {getTextArea(text)}}>Copy</BodyFormButton>
               <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
-
               <BodyButton onClick={alertPeep} >Download</BodyButton>
-              {/* </>
-              : null} */}
           </BodyContainer>
+          </> 
+        }
         </>
     )}   
 
