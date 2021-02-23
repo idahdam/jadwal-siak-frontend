@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { 
     BodyContainer,
     BodyTitle,
@@ -29,6 +29,7 @@ const url =  REACT_APP_CLOUD_URL;
 
 const Body = () => {
     const dayArray = ["senin", "selasa", "rabu", "kamis", "jumat", "sabtu"]
+    const textAreaRef = useRef(null);
     const [crop, setCrop] = useState({ unit: '%'});
     const [completedCrop, setCompletedCrop] = useState(null);
     const [show, setShow] = useState(false)
@@ -68,6 +69,16 @@ const Body = () => {
       })
     }
     
+    const getTextArea = ( text ) => {
+      textAreaRef.current.select();
+      document.execCommand('copy');
+      (Swal.fire({
+        icon: 'success',
+        title: 'Copied!',
+        showConfirmButton: false,
+        timer: 1500
+      }))
+    }
     const manipulateURL = (imageUrl) => {
       var str = imageUrl
       var pos = str.indexOf('upload/')
@@ -165,8 +176,8 @@ const Body = () => {
     return(
         <>  
           <BodyContainer>
-            <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle>
-            <BodyFormButton>
+            {/* <BodyTitle>Kamu seharian tidak ada matkul di hari apa?</BodyTitle> */}
+            {/* <BodyFormButton>
               <input type="checkbox" id="Senin" name="Senin" value="Senin" onChange={() => setButtonhandler(button, 'senin')}/>
               <label > Senin</label><br/>
               <input type="checkbox" id="Selasa" name="Selasa" value="Selasa" onChange={() => setButtonhandler(button, 'selasa')}/>
@@ -179,7 +190,7 @@ const Body = () => {
               <label > Jumat</label><br/>
               <input type="checkbox" id="Sabtu" name="Sabtu" value="Sabtu" onChange={() => setButtonhandler(button, 'sabtu')}/>
               <label > Sabtu</label><br/>
-            </BodyFormButton>
+            </BodyFormButton> */}
             <BodyTitle>Silakan upload screenshot SIAKNG-mu di bawah ini.</BodyTitle>
             <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
             <BodyForm>
@@ -203,8 +214,10 @@ const Body = () => {
               <p>top: {crop.y}, left: {crop.x}, width: {crop.width}, height: {crop.height}</p>
               <BodyButton onClick={() => onClickSet(imagePos, image)}>Set</BodyButton>
               <BodyDesc>Berikut versi JSON:</BodyDesc>
-              <BodyTextArea placeholder="Text area ini bisa di-stretch." value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
+              <BodyTextArea placeholder="Text area ini bisa di-stretch." ref ={textAreaRef} id="textarea" value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
+              <BodyFormButton onClick={(text) => {getTextArea(text)}}>Copy</BodyFormButton>
               <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
+
               <BodyButton onClick={alertPeep} >Download</BodyButton>
               {/* </>
               : null} */}

@@ -20,8 +20,10 @@ export const BodyForm = styled.div`
 
 `
 
-export const BodyFormButton = styled.div`
+export const BodyFormButton = styled.button`
     display: inline;
+    position: absolute;
+    transform: translate(-48px, 1px)
 `
 
 export const BodyButton = styled.button`
