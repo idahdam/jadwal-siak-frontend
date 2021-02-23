@@ -176,7 +176,7 @@ const Body = () => {
         try {
           const res = await axios.post(url, formData);
           const imageUrl = await res.data.secure_url;
-          const image = await axios.post(`http://jadwal-siak-backend.herokuapp.com/api/upload`, {
+          const image = await axios.post(`https://jadwal-siak-backend.herokuapp.com/api/upload`, {
             imageUrl
           })
           .then(Swal.fire({
