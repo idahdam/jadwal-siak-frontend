@@ -101,12 +101,13 @@ const Body = () => {
         await worker.terminate();
         }
         catch(e){
-          Swal.fire({
-            icon: 'error',
-            title: e,
-            text: 'Apa kamu sudah memilih area?',
-            footer: '<a href="https://google.com">Why do I have this issue?</a>'
-          })
+          console.log(e)
+          // Swal.fire({
+          //   icon: 'error',
+          //   title: e,
+          //   text: 'Apa kamu sudah memilih area?',
+          //   footer: '<a href="https://google.com">Why do I have this issue?</a>'
+          // })
         }
       })();
 
