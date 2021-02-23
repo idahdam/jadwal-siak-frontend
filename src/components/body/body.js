@@ -7,6 +7,7 @@ import {
     BodyInput,
     BodyImage,
     BodyTextArea,
+    BodyTextAreaPreview,
     BodyButton,
     BodyFormButton
 } from './body.elements'
@@ -35,6 +36,7 @@ const Body = () => {
     const [show, setShow] = useState(false)
     const [image, setImage] = useState(null);
     const [text, setText] = useState('');
+    const [preview, setPreview] = useState('');
     const [button, setButton] = useState({
       senin: false,
       selasa: false,
@@ -106,26 +108,37 @@ const Body = () => {
         await worker.initialize('ind');
         const { data: { text } } = await worker.recognize('https://res.cloudinary.com/dxsh8co1d/image/upload/v1613980684/nucomhpu0nmlzwaalmkv.png', {rectangle});
         console.log(text);
-        parseText(text)
-        setTextArea(data);
+        setPreview(text)
+        // parseText(text)
+        // setTextArea(data);
         // console.log(data)
         await worker.terminate();
+        Swal.fire({
+          icon: 'success',
+          title: 'Scan berhasil!',
+          showConfirmButton: false,
+          timer: 1500
+        })
         }
         catch(e){
           console.log(e)
-          // Swal.fire({
-          //   icon: 'error',
-          //   title: e,
-          //   text: 'Apa kamu sudah memilih area?',
-          //   footer: '<a href="https://google.com">Why do I have this issue?</a>'
-          // })
+          Swal.fire({
+            icon: 'error',
+            title: e,
+            text: 'Apa kamu sudah memilih area?',
+            footer: '<a href="https://google.com">Why do I have this issue?</a>'
+          })
         }
       })();
 
     }
 
-    const setTextArea = (a) => {
-      var dictJSON = JSONsafeStringify(a)
+    const setPreviewArea = (preview) => {
+      setPreview(preview)
+    }
+
+    const setTextArea = (preview) => {
+      var dictJSON = JSONsafeStringify(preview)
       setText(dictJSON)
     }
 
@@ -137,11 +150,16 @@ const Body = () => {
       alert('ngga diaktifin dulu biar ga rate limit server hehe')
     }
 
-    const onClickSet = (imagePos, image) => {
+    const onScan = (imagePos, image) => {
       // setImage('https://res.cloudinary.com/dxsh8co1d/image/upload/c_mfit,e_blackwhite,h_694,o_100,q_100,w_1205,z_1/v1613893875/Screenshot_43_ze84hi.png')
       // manipulateURL(image)
       iterOCR(image, imagePos)
       // manipulateURL(image)
+    }
+
+    const onClickSet = () => {
+        parseText(preview)
+        setTextArea(data);
     }
 
     const onSubmit = async () => {
@@ -212,9 +230,15 @@ const Body = () => {
                 onComplete={(c) => handleOnCropComplete(c)}
               />
               <p>top: {crop.y}, left: {crop.x}, width: {crop.width}, height: {crop.height}</p>
-              <BodyButton onClick={() => onClickSet(imagePos, image)}>Set</BodyButton>
+              <BodyButton onClick={() => onScan(imagePos, image)}>Scan</BodyButton>
+              <BodyDesc>Preview, klik set bila hasil sudah sesuai:</BodyDesc>
+              <BodyTextAreaPreview readOnly={true} placeholder="Area preview" value={preview} onChange={(preview) => setTextArea(text)}></BodyTextAreaPreview>
+              <br/>
+              <br/>
+              <BodyButton onClick={() => onClickSet()}>Set</BodyButton>
+              <br/>
               <BodyDesc>Berikut versi JSON:</BodyDesc>
-              <BodyTextArea placeholder="Text area ini bisa di-stretch." ref ={textAreaRef} id="textarea" value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
+              <BodyTextArea readOnly={true} placeholder="Area JSON" ref ={textAreaRef} id="textarea" value={text} onChange={(text) => setTextArea(text)}></BodyTextArea>
               <BodyFormButton onClick={(text) => {getTextArea(text)}}>Copy</BodyFormButton>
               <BodyDesc>Klik tombol di bawah untuk mendownload versi .ICS:</BodyDesc>
 

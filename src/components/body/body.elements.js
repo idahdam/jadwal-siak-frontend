@@ -60,7 +60,12 @@ export const BodyTextArea = styled.textarea`
     height: 20rem;
     width: 50rem;
 `
-
+export const BodyTextAreaPreview = styled.textarea`
+    width: 20rem;
+    font-size: 20px;
+    height: 10rem;
+    width: 50rem;
+`
 export const BodyImage = styled.img`
     width: 50%;
     height: auto;
