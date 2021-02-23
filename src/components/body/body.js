@@ -176,7 +176,7 @@ const Body = () => {
         try {
           const res = await axios.post(url, formData);
           const imageUrl = await res.data.secure_url;
-          const image = await axios.post(`https://jadwal-siak-backend.herokuapp.com/api/upload`, {
+          const image = await axios.post(`http://jadwal-siak-backend.herokuapp.com/api/upload`, {
             imageUrl
           })
           .then(Swal.fire({
@@ -185,10 +185,11 @@ const Body = () => {
             showConfirmButton: false,
             timer: 1500
           }))
-          .then(setShow(true))
+          .then(setShow(!show))
           .then(setImage(imageUrl))
 
         } catch (err) {
+          console.log(err)
           Swal.fire({
             icon: 'error',
             title: err,
