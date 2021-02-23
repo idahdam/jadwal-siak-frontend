@@ -207,8 +207,8 @@ const Body = () => {
             <BodyDesc>Format file berupa .jpg atau .png.</BodyDesc>
             <BodyForm>
               <BodyInput type='file' name='image' onChange={onChange} />
-              {/* <BodyButton onClick={onSubmit} >Upload</BodyButton> */}
-              <BodyButton onClick={alertPeep} >Upload</BodyButton>
+              <BodyButton onClick={onSubmit} >Upload</BodyButton>
+              {/* <BodyButton onClick={alertPeep} >Upload</BodyButton> */}
             </BodyForm>
           </BodyContainer></> 
           :
