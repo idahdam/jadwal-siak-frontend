@@ -147,7 +147,7 @@ const Body = () => {
     };
 
     const alertPeep = () => {
-      alert('ngga diaktifin dulu biar ga rate limit server hehe')
+      alert('Nggak diaktifkan dulu untuk demo. Belum deploy ke MongoDB.')
       setShow(!show)
       Swal.fire({
         icon: 'success',
